@@ -36,4 +36,6 @@ WORKDIR /src
 COPY build_environment.sh /
 COPY build.sh /
 
+RUN chmod 0755 /*.sh
+
 ENTRYPOINT ["/build.sh"]
