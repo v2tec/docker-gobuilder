@@ -1,24 +1,27 @@
-
-
 machine:
   services:
     - docker
   environment:
-    IMAGE_NAME: stffabi/goreleaser
-    HUB_BRANCH: $(if [ "$CIRCLE_BRANCH" == "master" ] ; then echo latest; else echo $CIRCLE_BRANCH; fi;)
+    IMAGE_NAME: stffabi/gobuilder
+    HUB_BRANCH: ci-$CIRCLE_BRANCH
     HUB_TAG: $(if [ "$CIRCLE_TAG" == "" ] ; then echo $HUB_BRANCH; else echo $CIRCLE_TAG; fi;)
 
 compile:
   override:
     - docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg VERSION="$HUB_TAG" --rm=false -t $IMAGE_NAME:$HUB_BRANCH .
-    - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-    - docker push $IMAGE_NAME:$HUB_BRANCH
 
 test:
   override:
     - echo "No Tests..."
 
 deployment:
+  hub-ci:
+    branch: /.*/
+    owner: stffabi
+    commands:
+      - echo Pushing $IMAGE_NAME:$HUB_BRANCH to docker hub.
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push $IMAGE_NAME:$HUB_BRANCH
   hub-tag:
     tag: /.*/
     owner: stffabi
@@ -27,4 +30,3 @@ deployment:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker tag $IMAGE_NAME:$HUB_BRANCH $IMAGE_NAME:$CIRCLE_TAG
       - docker push $IMAGE_NAME:$CIRCLE_TAG
-
