@@ -21,6 +21,7 @@ test:
 deployment:
   hub-tag:
     tag: /.*/
+    owner: stffabi
     commands:
       - echo Pushing $IMAGE_NAME:$CIRCLE_TAG to docker hub.
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
