@@ -1,4 +1,4 @@
-FROM golang:1.6.4
+FROM golang:1.7.4
 MAINTAINER Fabrizio Steiner <stffabi@users.noreply.github.com>
 
 ARG BUILD_DATE
