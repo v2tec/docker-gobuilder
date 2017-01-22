@@ -19,12 +19,6 @@ echo "Running Tests $pkgName..."
 if [ "$1" == "release" ]
 then
   echo "Release Building $pkgName..."
-  if [ ! -f goreleaser.yml ];
-  then
-    echo "goreleaser.yml missing, can't build release."
-    exit 1
-  fi
-  
   CGO_ENABLED=${CGO_ENABLED:-0} \
   goreleaser
 else
