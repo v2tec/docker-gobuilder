@@ -2,7 +2,7 @@ machine:
   services:
     - docker
   environment:
-    IMAGE_NAME: stffabi/gobuilder
+    IMAGE_NAME: v2tec/gobuilder
     HUB_BRANCH: ci-$CIRCLE_BRANCH
     HUB_TAG: $(if [ "$CIRCLE_TAG" == "" ] ; then echo $HUB_BRANCH; else echo $CIRCLE_TAG; fi;)
 
@@ -17,14 +17,14 @@ test:
 deployment:
   hub-ci:
     branch: /.*/
-    owner: stffabi
+    owner: v2tec
     commands:
       - echo Pushing $IMAGE_NAME:$HUB_BRANCH to docker hub.
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push $IMAGE_NAME:$HUB_BRANCH
   hub-tag:
     tag: /.*/
-    owner: stffabi
+    owner: v2tec
     commands:
       - echo Pushing $IMAGE_NAME:$CIRCLE_TAG to docker hub.
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
