@@ -35,7 +35,7 @@ RUN curl --silent --show-error --fail --location \
 RUN mkdir -p /tmp \
   && curl --silent --show-error --fail --location \
       --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" -o - \
-      "https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz" \
+      "https://get.docker.com/builds/Linux/x86_64/docker-${docker}.tgz" \
     | tar -xz -C /tmp \
   && mv /tmp/docker/* /usr/bin \
   && rm -rf /tmp \
