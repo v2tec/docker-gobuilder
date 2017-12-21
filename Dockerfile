@@ -32,7 +32,7 @@ RUN curl --silent --show-error --fail --location \
   && /usr/bin/goreleaser -v
 
 # Install docker binary
-RUN mkdir /tmp \
+RUN mkdir -p /tmp \
   && curl --silent --show-error --fail --location \
       --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" -o - \
       "https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz" \
