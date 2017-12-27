@@ -11,3 +11,11 @@ jobs:
           docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg VERSION="$HUB_TAG" --rm=false -t $IMAGE_NAME:$HUB_TAG .
           docker login -u $DOCKER_USER -p $DOCKER_PASS
           docker push $IMAGE_NAME:$HUB_TAG
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
