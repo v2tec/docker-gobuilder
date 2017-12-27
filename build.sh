@@ -24,5 +24,5 @@ then
 else
   echo "Snapshot Building $pkgName..."
   CGO_ENABLED=${CGO_ENABLED:-0} \
-  goreleaser --snapshot
+  goreleaser --snapshot --skip-publish
 fi

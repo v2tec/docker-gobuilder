@@ -1,32 +1,13 @@
-machine:
-  services:
-    - docker
-  environment:
-    IMAGE_NAME: v2tec/gobuilder
-    HUB_BRANCH: ci-$CIRCLE_BRANCH
-    HUB_TAG: $(if [ "$CIRCLE_TAG" == "" ] ; then echo $HUB_BRANCH; else echo $CIRCLE_TAG; fi;)
-
-compile:
-  override:
-    - docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg VERSION="$HUB_TAG" --rm=false -t $IMAGE_NAME:$HUB_BRANCH .
-
-test:
-  override:
-    - echo "No Tests..."
-
-deployment:
-  hub-ci:
-    branch: /.*/
-    owner: v2tec
-    commands:
-      - echo Pushing $IMAGE_NAME:$HUB_BRANCH to docker hub.
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push $IMAGE_NAME:$HUB_BRANCH
-  hub-tag:
-    tag: /.*/
-    owner: v2tec
-    commands:
-      - echo Pushing $IMAGE_NAME:$CIRCLE_TAG to docker hub.
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker tag $IMAGE_NAME:$HUB_BRANCH $IMAGE_NAME:$CIRCLE_TAG
-      - docker push $IMAGE_NAME:$CIRCLE_TAG
+version: 2
+jobs:
+  build:
+    machine: true
+    environment:
+      - IMAGE_NAME: v2tec/gobuilder
+    steps:
+      - checkout
+      - run: |
+          HUB_TAG=$(if [ "$CIRCLE_TAG" == "" ] ; then echo ci-$CIRCLE_BRANCH; else echo $CIRCLE_TAG; fi;)
+          docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg VERSION="$HUB_TAG" --rm=false -t $IMAGE_NAME:$HUB_TAG .
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+          docker push $IMAGE_NAME:$HUB_TAG
