@@ -12,7 +12,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.schema-version="1.0"
 
 ARG glide=0.12.3
-ARG goreleaser=0.40.3
+ARG goreleaser=0.57.0
 ARG docker=17.03.0-ce
 
 # Install glide binary
